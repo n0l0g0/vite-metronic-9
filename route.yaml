@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: vite-metronic-9
+  namespace: vite-metronic-9-demo
+spec:
+  to:
+    kind: Service
+    name: vite-metronic-9
+  port:
+    targetPort: 80
+  tls:
+    termination: edge

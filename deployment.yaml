@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vite-metronic-9
-  namespace: vite-metronic-9-demo
+  namespace: vite-metronic-9
 spec:
   replicas: 1
   selector:
@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: vite-metronic-9
-          image: image-registry.openshift-image-registry.svc:5000/vite-metronic-9-demo/vite-metronic-9:latest
+          image: image-registry.openshift-image-registry.svc:5000/vite-metronic-9/vite-metronic-9:latest
           ports:
             - containerPort: 80

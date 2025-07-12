@@ -27,6 +27,9 @@ RUN mkdir -p /var/cache/nginx/client_temp \
     /var/cache/nginx/scgi_temp \
     && chown -R 101:0 /var/cache/nginx
 
-EXPOSE 80
+# เปลี่ยน nginx listen port เป็น 8080
+RUN sed -i 's/listen       80;/listen 8080;/' /etc/nginx/conf.d/default.conf
+
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
 

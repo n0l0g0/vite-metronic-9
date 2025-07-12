@@ -30,6 +30,9 @@ RUN mkdir -p /var/cache/nginx/client_temp \
 # เปลี่ยน nginx listen port เป็น 8080
 RUN sed -i 's/listen       80;/listen 8080;/' /etc/nginx/conf.d/default.conf
 
+# แก้ pid file ให้ไปอยู่ที่ /tmp/nginx.pid
+RUN sed -i 's|pid        /run/nginx.pid;|pid        /tmp/nginx.pid;|' /etc/nginx/nginx.conf
+
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
 

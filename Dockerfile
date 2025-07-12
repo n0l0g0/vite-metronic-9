@@ -33,6 +33,9 @@ RUN sed -i 's/listen       80;/listen 8080;/' /etc/nginx/conf.d/default.conf
 # แก้ pid file ให้ไปอยู่ที่ /tmp/nginx.pid
 RUN sed -i 's|pid        /run/nginx.pid;|pid        /tmp/nginx.pid;|' /etc/nginx/nginx.conf
 
+# ใช้ custom nginx.conf สำหรับ SPA fallback
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
 

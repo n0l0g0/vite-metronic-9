@@ -15,14 +15,26 @@ interface ApiAuthProviderProps {
  * ApiAuthProvider Component
  * ให้บริการ authentication context ที่ใช้ backend API
  * 
+ * *** DEMO MODE: Mocked auth state for demo purposes ***
+ * 
  * @param children - React child components
  * @returns JSX Element ที่ wrap ด้วย authentication context
  */
 export function ApiAuthProvider({ children }: ApiAuthProviderProps) {
-  // State variables สำหรับจัดการ authentication state
-  const [loading, setLoading] = useState<boolean>(true);
-  const [auth, setAuth] = useState<AuthModel | undefined>();
-  const [user, setUser] = useState<UserModel | undefined>();
+  // *** DEMO MODE: Mock auth state ***
+  const [loading, setLoading] = useState<boolean>(false); // Set to false for demo
+  const [auth, setAuth] = useState<AuthModel | undefined>({
+    access_token: 'demo-token', // Mock token
+    refresh_token: undefined,
+  });
+  const [user, setUser] = useState<UserModel | undefined>({
+    username: 'demo-user',
+    email: 'demo@example.com',
+    first_name: 'Demo',
+    last_name: 'User',
+    fullname: 'Demo User',
+    is_admin: true, // Set as admin for demo
+  });
 
   // ใช้ useCallback สำหรับ setUser เพื่อป้องกัน infinite loop
   const setUserCallback = useCallback((userData: React.SetStateAction<UserModel | undefined>) => {
@@ -31,22 +43,25 @@ export function ApiAuthProvider({ children }: ApiAuthProviderProps) {
 
   /**
    * ฟังก์ชันสำหรับบันทึกข้อมูล authentication
-   * ไม่ต้องจัดการ localStorage แล้ว เพราะใช้ HttpOnly cookies
+   * *** DEMO MODE: Mock implementation ***
    * @param authData - ข้อมูล authentication ที่ได้จากการล็อกอิน
    */
   const saveAuth = useCallback((authData: AuthModel | undefined) => {
+    console.log('ApiProvider: DEMO MODE - Mock saveAuth called');
     setAuth(authData);
-    // HttpOnly cookies จะถูกจัดการโดย server อัตโนมัติ
   }, []);
 
   /**
    * ฟังก์ชันสำหรับล็อกเอาท์
-   * ลบข้อมูล authentication และรีเซ็ต state
+   * *** DEMO MODE: Mock implementation ***
    */
   const logout = async (): Promise<void> => {
+    console.log('ApiProvider: DEMO MODE - Mock logout called');
     setLoading(true);
     try {
-      await ApiAdapter.logout();
+      // *** DEMO MODE: Comment out actual API call ***
+      // await ApiAdapter.logout();
+      console.log('ApiProvider: DEMO MODE - Skipping actual logout API call');
     } catch (error: any) {
       console.warn('Logout API error:', error);
     } finally {
@@ -58,36 +73,41 @@ export function ApiAuthProvider({ children }: ApiAuthProviderProps) {
 
   /**
    * ฟังก์ชันสำหรับตรวจสอบสถานะการล็อกอิน
-   * ใช้ HttpOnly cookies แทน localStorage
+   * *** DEMO MODE: Mock implementation ***
    */
   const verify = async (): Promise<void> => {
-    console.log('ApiProvider: Starting verify()');
+    console.log('ApiProvider: DEMO MODE - Mock verify() called');
     
-    try {
-      const userProfile = await ApiAdapter.verify();
-      if (userProfile) {
-        // ตั้งค่า auth state (placeholder เพราะใช้ cookies)
-        if (!auth) {
-          setAuth({ access_token: 'cookie-based' });
-        }
+    // *** DEMO MODE: Comment out actual API call ***
+    // try {
+    //   const userProfile = await ApiAdapter.verify();
+    //   if (userProfile) {
+    //     // ตั้งค่า auth state (placeholder เพราะใช้ cookies)
+    //     if (!auth) {
+    //       setAuth({ access_token: 'cookie-based' });
+    //     }
         
-        // ดึงข้อมูลผู้ใช้หากยังไม่มี
-        if (!user) {
-          setUser(userProfile);
-        }
-      } else {
-        // ถ้า verification ไม่สำเร็จ ให้รีเซ็ต state
-        setAuth(undefined);
-        setUser(undefined);
-      }
-    } catch (error: any) {
-      console.error('Verify error:', error);
-      // รีเซ็ต state เมื่อเกิด auth error
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        setAuth(undefined);
-        setUser(undefined);
-      }
-    }
+    //     // ดึงข้อมูลผู้ใช้หากยังไม่มี
+    //     if (!user) {
+    //       setUser(userProfile);
+    //     }
+    //   } else {
+    //     // ถ้า verification ไม่สำเร็จ ให้รีเซ็ต state
+    //     setAuth(undefined);
+    //     setUser(undefined);
+    //   }
+    // } catch (error: any) {
+    //   console.error('Verify error:', error);
+    //   // รีเซ็ต state เมื่อเกิด auth error
+    //   if (error.response?.status === 401 || error.response?.status === 403) {
+    //     setAuth(undefined);
+    //     setUser(undefined);
+    //   }
+    // }
+
+    // *** DEMO MODE: Always return success with mock data ***
+    console.log('ApiProvider: DEMO MODE - Always returning success with mock data');
+    return Promise.resolve();
   };
 
   /**
@@ -96,23 +116,30 @@ export function ApiAuthProvider({ children }: ApiAuthProviderProps) {
    */
   const isAdmin = user?.is_admin || false;
 
+  // *** DEMO MODE: Comment out initialization logic ***
   // ตรวจสอบสถานะการล็อกอินเมื่อ component mount
-  useEffect(() => {
-    // ตรวจสอบสถานะการล็อกอินด้วย HttpOnly cookies
-    const initializeAuth = async () => {
-      setLoading(true);
-      try {
-        // ตรวจสอบสถานะการล็อกอิน
-        await verify();
-      } catch (error) {
-        console.error('Initialize auth error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   // ตรวจสอบสถานะการล็อกอินด้วย HttpOnly cookies
+  //   const initializeAuth = async () => {
+  //     setLoading(true);
+  //     try {
+  //       // ตรวจสอบสถานะการล็อกอิน
+  //       await verify();
+  //     } catch (error) {
+  //       console.error('Initialize auth error:', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    initializeAuth();
-  }, []); // ใช้ empty dependency array เพื่อให้รันเฉพาะครั้งแรก
+  //   initializeAuth();
+  // }, []);
+
+  // *** DEMO MODE: Mock initialization ***
+  useEffect(() => {
+    console.log('ApiProvider: DEMO MODE - Mock initialization completed');
+    setLoading(false);
+  }, []);
 
   // ค่า context ที่จะส่งให้ children components
   const contextValue = {

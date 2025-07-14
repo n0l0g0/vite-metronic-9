@@ -12,7 +12,7 @@ const authUrl = "/api/auth";
  * เปลี่ยนเส้นทางไปยัง backend เพื่อเริ่มกระบวนการ SAML
  */
 export const initiateSamlLogin = () => {
-  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const apiUrl = import.meta.env.VITE_AUTH_URL || "http://localhost:8000";
   window.location.href = `${apiUrl}${authUrl}/saml`;
 };
 

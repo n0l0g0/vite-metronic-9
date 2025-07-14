@@ -19,14 +19,24 @@ export function AppRouting() {
   const location = useLocation();
   const path = location.pathname.trim();
 
+  // *** DEMO MODE: Comment out auth verification ***
+  // useEffect(() => {
+  //   if (firstLoad) {
+  //     verify().finally(() => {
+  //       setLoading(false);
+  //       setFirstLoad(false);
+  //     });
+  //   }
+  // }, [firstLoad, verify, setLoading]);
+
+  // *** DEMO MODE: Mock initialization without auth verification ***
   useEffect(() => {
     if (firstLoad) {
-      verify().finally(() => {
-        setLoading(false);
-        setFirstLoad(false);
-      });
+      console.log('AppRouting: DEMO MODE - Skipping auth verification');
+      setLoading(false);
+      setFirstLoad(false);
     }
-  }, [firstLoad, verify, setLoading]);
+  }, [firstLoad, setLoading]);
 
   useEffect(() => {
     if (!firstLoad && path !== previousLocation) {

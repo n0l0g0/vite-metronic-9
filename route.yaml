@@ -3,8 +3,10 @@ kind: Route
 metadata:
   name: vite-metronic-9
   namespace: vite-metronic-9
+  annotations:
+    openshift.io/host.generated: "false"
 spec:
-  host: Oil.wintel.tech
+  host: oil.wintel.tech  # ต้องเป็น lowercase
   to:
     kind: Service
     name: vite-metronic-9

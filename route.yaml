@@ -4,6 +4,7 @@ metadata:
   name: vite-metronic-9
   namespace: vite-metronic-9
 spec:
+  host: Oil.wintel.tech
   to:
     kind: Service
     name: vite-metronic-9

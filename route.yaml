@@ -3,14 +3,11 @@ kind: Route
 metadata:
   name: vite-metronic-9
   namespace: vite-metronic-9
-  annotations:
-    openshift.io/host.generated: "false"
 spec:
-  host: oil.wintel.tech  # ต้องเป็น lowercase
   to:
     kind: Service
     name: vite-metronic-9
   port:
-    targetPort: 8080
+    targetPort: 80
   tls:
     termination: edge
